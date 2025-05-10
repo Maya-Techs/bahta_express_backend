@@ -76,10 +76,23 @@ CREATE TABLE IF NOT EXISTS `tags` (
 
 CREATE TABLE IF NOT EXISTS `services` (
     `service_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `service_name` VARCHAR(100) NOT NULL UNIQUE.
+    `service_name` VARCHAR(100) NOT NULL UNIQUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Clients TABLE
+CREATE TABLE IF NOT EXISTS `clients` (
+  `client_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `phone` VARCHAR(20) DEFAULT NULL,
+  `website` VARCHAR(255) DEFAULT NULL,
+  `company_name` VARCHAR(255) NOT NULL,
+  `industry` VARCHAR(100) DEFAULT NULL,
+  `logo_url` VARCHAR(500) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`client_id`)
+) ENGINE=InnoDB;
 
 -- blog Tables
 CREATE TABLE IF NOT EXISTS `blogs` (
@@ -107,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `blog_categories` (
 -- Create Blog Tags Table
 CREATE TABLE IF NOT EXISTS `blog_tags` (
     `blog_id` INT NOT NULL,
-    `tag_id` INT NOT NULL,
+    `tag_id` INT NOT NdULL,
     PRIMARY KEY (`blog_id`, `tag_id`),
     FOREIGN KEY (`blog_id`) REFERENCES `blogs`(`blog_id`) ON DELETE CASCADE,
     FOREIGN KEY (`tag_id`) REFERENCES `tags`(`tag_id`) ON DELETE CASCADE
@@ -127,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `quotes` (
     `number_of_pieces` INT,
     `commodity` TEXT,
     `additional_info` TEXT,
+    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     `submitted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
@@ -137,10 +151,10 @@ CREATE TABLE IF NOT EXISTS `quote_services` (
     FOREIGN KEY (quote_id) REFERENCES `quotes`(quote_id) ON DELETE CASCADE,
     FOREIGN KEY (service_id) REFERENCES `services`(service_id) ON DELETE CASCADE
 );
-INSERT INTO `services` (service_name) VALUES
-('Ocean Freight'),
-('Air Freight'),
-('Customs Clearance'),
-('Warehousing'),
-('Documentation Services'),
-('Human Network Air Cargo');
+-- INSERT INTO `services` (service_name) VALUES
+-- ('Ocean Freight'),
+-- ('Air Freight'),
+-- ('Customs Clearance'),
+-- ('Warehousing'),
+-- ('Documentation Services'),
+-- ('Human Network Air Cargo');

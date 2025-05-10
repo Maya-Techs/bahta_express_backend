@@ -135,7 +135,7 @@ const QuoteNotificationTemplate = (quote) => {
                 >
                   <tr>
                     <td style="padding: 8px 0"><strong>Weight:</strong></td>
-                    <td>${quote.weight} kg</td>
+                    <td>${quote.weight_kg} kg</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0"><strong>Dimensions:</strong></td>
@@ -156,7 +156,9 @@ const QuoteNotificationTemplate = (quote) => {
                 <h3 style="margin-top: 30px; color: #232526">
                   Selected Services:
                 </h3>
-                <p style="font-size: 14px; margin-bottom: 0">${quote.services}</p>
+                <p style="font-size: 14px; margin-bottom: 0">${quote?.service_list
+                  .map((s) => s.name)
+                  .join(", ")}</p>
 
                 <h3 style="margin-top: 30px; color: #232526">
                   Additional Info:
@@ -170,12 +172,12 @@ const QuoteNotificationTemplate = (quote) => {
                     border-left: 4px solid #ff6b00;
                   "
                 >
-                  ${quote.additional_information}
+                  ${quote.additional_info}
                 </p>
 
                 <div style="margin: 30px 0">
                   <a
-                    href="https://youradminpanel.com/quotes"
+                    href="https://dashboard.bahtaexpress.com/quotes"
                     class="button"
                     style="
                       display: inline-block;

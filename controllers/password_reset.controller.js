@@ -45,7 +45,7 @@ async function requestPasswordReset(req, res, next) {
     }
     const firstName = user && user.data[0].user_first_name;
     const resetToken = generateResetToken(email);
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+    const resetLink = `${process.env.DASHBOARD_FRONTEND_URL}/pages/change-password?token=${resetToken}`;
     const emailContent = generatePasswordResetEmailContent(
       resetLink,
       firstName

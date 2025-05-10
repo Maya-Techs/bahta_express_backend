@@ -199,6 +199,19 @@ class UserService {
       throw new Error(error.message);
     }
   }
+  static async getActiveUsersEmails() {
+    try {
+      const activeUsers = await db.query(
+        `SELECT user_email FROM users WHERE is_active = true`
+      );
+      if (activeUsers.length === 0) {
+        throw new Error("No active users found.");
+      }
+      return activeUsers.map((user) => user.user_email);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 module.exports = UserService;

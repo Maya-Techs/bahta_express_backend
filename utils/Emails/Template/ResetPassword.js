@@ -1,5 +1,6 @@
 const generatePasswordResetEmailContent = (resetLink, firstName) => {
   const year = new Date().getFullYear();
+
   return `<!DOCTYPE html>
 <html lang="en">
   <head>

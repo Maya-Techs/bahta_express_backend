@@ -40,13 +40,14 @@ const verifyToken = async (req, res, next) => {
 
     req.user_email = decoded.user_email;
     req.user_id = decoded.user_id;
+
     next();
   });
 };
 const isAdmin = async (req, res, next) => {
   const email = req.user_email;
   const user = await getUserByEmail(email);
-  if (user.data[0].company_role_id === 1) {
+  if (user.data[0].company_role_id === 2) {
     next();
   } else {
     return res.status(403).send({
@@ -61,9 +62,8 @@ const IsAuthorized = async (req, res, next) => {
 
   const user = await getUserByEmail(email);
   if (
+    user.data[0]?.company_role_id === 2 ||
     user.data[0]?.company_role_id === 1
-    // ||
-    // user.data[0]?.company_role_id === 2
   ) {
     next();
   } else {

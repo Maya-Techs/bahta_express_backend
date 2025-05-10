@@ -1,6 +1,5 @@
 const conn = require("../config/db.config");
 
-// Check if a client exists by ID
 async function checkIfClientExistsByID(client_id) {
   const query = "SELECT * FROM clients WHERE client_id = ?";
   const rows = await conn.query(query, [client_id]);
@@ -13,7 +12,6 @@ async function checkIfClientExistsByEmail(email) {
   return rows.length > 0;
 }
 
-// Create a new client
 async function createClient(client) {
   let createdClient = {};
 
@@ -24,7 +22,6 @@ async function createClient(client) {
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    // Execute the query with client data
     const result = await conn.query(query, [
       client.name,
       client.email,
@@ -32,17 +29,15 @@ async function createClient(client) {
       client.website,
       client.company_name,
       client.industry,
-      client.logo_url, // Saving the logo URL (or null if no file uploaded)
+      client.logo_url,
     ]);
 
-    // Check if one row was affected (i.e., the client was successfully created)
     if (result.affectedRows !== 1) {
       throw new Error("Failed to create client");
     }
 
-    // Assign client_id and return the created client data
     createdClient = {
-      client_id: result.insertId, // Get the auto-generated ID of the new client
+      client_id: result.insertId,
       ...client,
     };
   } catch (err) {
@@ -53,7 +48,6 @@ async function createClient(client) {
   return createdClient;
 }
 
-// Get all clients
 async function getAllClients() {
   try {
     const rows = await conn.query("SELECT * FROM clients");
@@ -73,10 +67,6 @@ async function getAllPubClients() {
   }
 }
 
-// write get client by id function?
-
-// Get client by ID
-
 async function getClientById(clientId) {
   try {
     const query = "SELECT * FROM clients WHERE client_id = ?";
@@ -91,7 +81,6 @@ async function getClientById(clientId) {
   }
 }
 
-// Delete a client
 async function deleteClient(clientId) {
   try {
     await conn.query("DELETE FROM clients WHERE client_id = ?", [clientId]);
@@ -122,13 +111,12 @@ async function updateClient(clientId, updatedClientData) {
       updatedClientData.industry,
     ];
 
-    // Only update logo_url if provided
     if (updatedClientData.logo_url) {
       updateFields.push("logo_url = ?");
       values.push(updatedClientData.logo_url);
     }
 
-    values.push(clientId); // for WHERE clause
+    values.push(clientId);
 
     const updateQuery = `
       UPDATE clients 

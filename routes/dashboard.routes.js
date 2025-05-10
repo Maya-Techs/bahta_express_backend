@@ -5,7 +5,7 @@ const authMiddleware = require("../middlewares/auth.middleware");
 
 router.get(
   "/dashboard/stats",
-  [authMiddleware.verifyToken, authMiddleware.isAdmin],
+  [authMiddleware.verifyToken, authMiddleware.IsAuthorized],
   statsController.getStats
 );
 

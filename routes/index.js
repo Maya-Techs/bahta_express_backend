@@ -20,6 +20,10 @@ const blogRouter = require("./blog.routes");
 
 const dashboardRouter = require("./dashboard.routes");
 
+const serviceRouter = require("./service.route");
+
+const quoteRouter = require("./quote.route");
+
 router.use(installRouter);
 
 router.use(loginRouter);
@@ -37,5 +41,9 @@ router.use(clientRouter);
 router.use(blogRouter);
 
 router.use(dashboardRouter);
+
+router.use(serviceRouter);
+
+router.use(quoteRouter);
 
 module.exports = router;
