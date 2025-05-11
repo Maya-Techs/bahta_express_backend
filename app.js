@@ -39,7 +39,7 @@ app.use(router);
 
 const SERVER = app.listen(port, () => {
   console.log(
-    `The server is living its best life at port... ${port} come say hi!`
+    `The server is living its best life at port... ${port} come say hi!!`
   );
 });
 
