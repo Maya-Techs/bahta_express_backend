@@ -12,11 +12,11 @@ const createQuote = async (req, res) => {
       phone_number,
       origin_address,
       destination_address,
-      weight_kg,
-      dimensions,
-      number_of_pieces,
+      weight_kg = "Not Provided",
+      dimensions = "Not Provided",
+      number_of_pieces = "Not Provided",
       commodity,
-      additional_info,
+      additional_info = "Not Provided",
       status,
       service_list,
     } = req.body;
@@ -39,7 +39,6 @@ const createQuote = async (req, res) => {
       service_list,
       status,
     };
-    console.log(quoteData);
 
     await sendQuoteNotificationToActiveUsers(quoteData);
 

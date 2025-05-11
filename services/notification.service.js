@@ -9,7 +9,7 @@ async function sendQuoteNotificationToActiveUsers(quote) {
     const activeUserEmails = await UserService.getActiveUsersEmails();
 
     if (activeUserEmails.length === 0) {
-      console.log("No active users to send notification to.");
+      // console.log("No active users to send notification to.");
       return;
     }
 
@@ -19,7 +19,7 @@ async function sendQuoteNotificationToActiveUsers(quote) {
       const subject = "New Quote Request Notification";
       const response = await sendNotification(email, subject, emailContent);
       if (response.status === "success") {
-        console.log(`Notification sent to: ${email}`);
+        // console.log(`Notification sent to: ${email}`);
       } else {
         console.error(
           `Failed to send notification to: ${email}, Error: ${response.message}`

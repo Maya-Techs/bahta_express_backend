@@ -27,7 +27,6 @@ async function createBlog(req, res, next) {
       ) {
         return res.status(400).json({ error: "All fields are required" });
       }
-
       const blogData = {
         author_id,
         status,
@@ -227,13 +226,16 @@ async function getBlogDetail(req, res, next) {
 async function getRelatedBlogs(req, res, next) {
   try {
     const { post_id } = req.body;
-
+    if (!post_id) {
+      return res.status(400).json({ error: "post_id is required" });
+    }
     const data = await postService.getBlogDetail(post_id);
-
+ 
     const posts = await postService.getRelatedBlogs(
       post_id,
       data[0].category_id
     );
+
     if (!posts) {
       return res.status(400).json({
         error: "Failed to get related blogs",

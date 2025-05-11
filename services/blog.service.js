@@ -105,13 +105,13 @@ async function getAllAdminPosts() {
       CONCAT(bai.user_first_name, ' ', bai.user_last_name) AS author_name,
       b.created_at,
       b.post_id,
-      b.title
+      b.title,
+      SUBSTRING(b.content, 1, 100) AS excerpt
     FROM blogs b
     INNER JOIN users_info bai ON b.author_id = bai.user_id
     ORDER BY b.blog_id DESC;`;
 
     const rows = await db.query(query);
-
     return rows;
   } catch (error) {
     console.error("Error getting all Blogs:", error);
@@ -127,7 +127,8 @@ async function getAllPublicBlogs() {
       CONCAT(bai.user_first_name, ' ', bai.user_last_name) AS author_name,
       b.created_at,
       b.post_id,
-      b.title
+      b.title,
+      SUBSTRING(b.content, 1, 100) AS excerpt
     FROM blogs b
     INNER JOIN users_info bai ON b.author_id = bai.user_id
     WHERE b.status = 'Published'
@@ -150,7 +151,8 @@ async function getPublicBlogs() {
       CONCAT(bai.user_first_name, ' ', bai.user_last_name) AS author_name,
       b.created_at,
       b.post_id,
-      b.title
+      b.title,
+      SUBSTRING(b.content, 1, 100) AS excerpt
     FROM blogs b
     INNER JOIN users_info bai ON b.author_id = bai.user_id
     WHERE b.status = 'Published'
@@ -217,7 +219,9 @@ LEFT JOIN categories cats ON blogCate.category_id = cats.category_id
 WHERE b.post_id = ? AND status = 'Published'
 ORDER BY b.blog_id DESC;
     `;
+
     const rows = await db.query(query, [postID]);
+
     const blogs = await Promise.all(
       rows.map(async (blog) => {
         try {
