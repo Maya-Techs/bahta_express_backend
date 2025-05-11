@@ -3,8 +3,6 @@ const router = express.Router();
 const serviceController = require("../controllers/service.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/services", serviceController.getAllServices);
-
 router.post(
   "/service",
   [authMiddleware.verifyToken, authMiddleware.isAdmin],
@@ -28,5 +26,6 @@ router.delete(
   [authMiddleware.verifyToken, authMiddleware.isAdmin],
   serviceController.deleteService
 );
+router.get("/services", serviceController.getAllServices);
 
 module.exports = router;
