@@ -5,10 +5,13 @@ require("dotenv").config();
 const sanitize = require("sanitize");
 
 const cors = require("cors");
+
 const allowedOrigins = [
   "https://bahtaexpress.com",
   "https://dashboard.bahtaexpress.com",
 ];
+
+// CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -20,26 +23,24 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-const port = process.env.PORT;
-
-const router = require("./routes");
-
 const app = express();
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
 
 app.use(express.json());
-
-// serve the pub dir as static..
-app.use("/public", express.static("public"));
-
 app.use(sanitize.middleware);
 
+app.use("/public", express.static("public"));
+
+const router = require("./routes");
 app.use(router);
 
+// Start the server
+const port = process.env.PORT;
 const SERVER = app.listen(port, () => {
   console.log(
-    `The server is living its best life at port... ${port} come say hi!!`
+    `The server is living its best life at port ${port} come say hi!!`
   );
 });
 
