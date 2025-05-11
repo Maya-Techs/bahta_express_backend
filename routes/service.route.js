@@ -26,6 +26,6 @@ router.delete(
   [authMiddleware.verifyToken, authMiddleware.isAdmin],
   serviceController.deleteService
 );
-router.get("/services", serviceController.getAllServices);
+router.get("/pub/services", serviceController.getAllServices);
 
 module.exports = router;
