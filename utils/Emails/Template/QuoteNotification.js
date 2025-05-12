@@ -177,7 +177,7 @@ const QuoteNotificationTemplate = (quote) => {
 
                 <div style="margin: 30px 0">
                   <a
-                    href="https://dashboard.bahtaexpress.com/quotes"
+                    href="https://dashboard.bahtaexpress.com/quote-list"
                     class="button"
                     style="
                       display: inline-block;
