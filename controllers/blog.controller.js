@@ -20,7 +20,6 @@ async function createBlog(req, res, next) {
         !status ||
         !title ||
         !content ||
-        !slug ||
         !category_id ||
         !tag_ids ||
         !imagePath
@@ -69,7 +68,6 @@ async function updateBlog(req, res, next) {
         !status ||
         !title ||
         !content ||
-        !slug ||
         !category_id ||
         !tag_ids
       ) {
@@ -230,7 +228,7 @@ async function getRelatedBlogs(req, res, next) {
       return res.status(400).json({ error: "post_id is required" });
     }
     const data = await postService.getBlogDetail(post_id);
- 
+
     const posts = await postService.getRelatedBlogs(
       post_id,
       data[0].category_id

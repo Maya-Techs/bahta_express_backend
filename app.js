@@ -6,11 +6,14 @@ const sanitize = require("sanitize");
 
 const cors = require("cors");
 
+// const allowedOrigins = [
+//   "https://bahtaexpress.com",
+//   "https://dashboard.bahtaexpress.com",
+// ];
 const allowedOrigins = [
-  "https://bahtaexpress.com",
-  "https://dashboard.bahtaexpress.com",
+  process.env.DASHBOARD_FRONTEND_URL,
+  process.env.LANDING_FRONTEND_URL,
 ];
-
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {

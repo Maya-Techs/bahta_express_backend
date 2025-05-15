@@ -45,8 +45,7 @@ const createQuote = async (req, res) => {
     const result = await quoteService.createQuote(quoteData, service_list);
 
     res.status(201).json({
-      message: "Quote Sent successfully",
-      //   quote_id: result.quoteId,
+      status: true,
     });
   } catch (error) {
     console.error("Error creating quote:", error);
