@@ -31,4 +31,6 @@ router.delete(
 
 router.get("/pub/clients", clientController.getAllPubClients);
 
+router.get("/pub/clients/testimonials", clientController.getWhatClientsSay);
+
 module.exports = router;

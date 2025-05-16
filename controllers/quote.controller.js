@@ -12,10 +12,7 @@ const createQuote = async (req, res) => {
       phone_number,
       origin_address,
       destination_address,
-      weight_kg = "Not Provided",
-      dimensions = "Not Provided",
-      number_of_pieces = "Not Provided",
-      commodity,
+      cargos = [],
       additional_info = "Not Provided",
       status,
       service_list,
@@ -24,6 +21,15 @@ const createQuote = async (req, res) => {
     if (!Array.isArray(service_list)) {
       return res.status(400).json({ message: "Service list must be an array" });
     }
+
+    // Optionally use the first cargo for backward compatibility or summaries
+    const {
+      weight_kg = "Not Provided",
+      dimensions = "Not Provided",
+      number_of_pieces = "Not Provided",
+      commodity = "Not Provided",
+    } = cargos[0];
+
     const quoteData = {
       first_name,
       last_name,
@@ -31,13 +37,10 @@ const createQuote = async (req, res) => {
       phone_number,
       origin_address,
       destination_address,
-      weight_kg,
-      dimensions,
-      number_of_pieces,
-      commodity,
       additional_info,
       service_list,
       status,
+      cargos,
     };
 
     await sendQuoteNotificationToActiveUsers(quoteData);
@@ -122,6 +125,7 @@ const updateQuote = async (req, res) => {
     if (service_ids && !Array.isArray(service_ids)) {
       return res.status(400).json({ message: "service_ids must be an array." });
     }
+   
 
     const updatedQuote = await quoteService.updateQuote(
       quoteId,

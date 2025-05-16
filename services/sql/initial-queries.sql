@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `company_name` VARCHAR(255) NOT NULL,
   `industry` VARCHAR(100) DEFAULT NULL,
   `logo_url` VARCHAR(500) NOT NULL,
+  `message` TEXT DEFAULT NULL,
+  `client_role` VARCHAR(100) DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`client_id`)
 ) ENGINE=InnoDB;
@@ -135,13 +137,19 @@ CREATE TABLE IF NOT EXISTS `quotes` (
     `phone_number` VARCHAR(50),
     `origin_address` TEXT,
     `destination_address` TEXT,
+    `additional_info` TEXT,
+    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    `submitted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `cargos` (
+    `cargo_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `quote_id` INT,
     `weight_kg` DECIMAL(10,2),
     `dimensions` VARCHAR(100),
     `number_of_pieces` INT,
     `commodity` TEXT,
-    `additional_info` TEXT,
-    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    `submitted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (`quote_id`) REFERENCES `quotes`(`quote_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `quote_services` (

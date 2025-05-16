@@ -18,8 +18,8 @@ async function createClient(client) {
   try {
     const query = `
       INSERT INTO clients 
-      (name, email, phone, website, company_name, industry, logo_url) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      (name, email, phone, website, company_name, industry, logo_url, message, client_role) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await conn.query(query, [
@@ -30,6 +30,8 @@ async function createClient(client) {
       client.company_name,
       client.industry,
       client.logo_url,
+      client.message,
+      client.client_role,
     ]);
 
     if (result.affectedRows !== 1) {
@@ -59,10 +61,29 @@ async function getAllClients() {
 }
 async function getAllPubClients() {
   try {
-    const rows = await conn.query("SELECT logo_url as logo FROM clients");
+    const rows = await conn.query(
+      "SELECT company_name AS name, logo_url AS logo FROM clients"
+    );
     return rows;
   } catch (error) {
     console.error("Error getting all pub clients:", error);
+    throw error;
+  }
+}
+
+async function getWhatClientsSay() {
+  try {
+    const query = `
+      SELECT name, company_name, logo_url, message, client_role 
+      FROM clients 
+      WHERE message IS NOT NULL AND message != '' 
+        AND client_role IS NOT NULL AND client_role != ''
+    `;
+    const rows = await conn.query(query);
+   
+    return rows;
+  } catch (error) {
+    console.error("Error fetching what clients say:", error);
     throw error;
   }
 }
@@ -101,6 +122,8 @@ async function updateClient(clientId, updatedClientData) {
       "website = ?",
       "company_name = ?",
       "industry = ?",
+      "message = ?",
+      "client_role = ?",
     ];
     let values = [
       updatedClientData.name,
@@ -109,9 +132,14 @@ async function updateClient(clientId, updatedClientData) {
       updatedClientData.website,
       updatedClientData.company_name,
       updatedClientData.industry,
+      updatedClientData.message ?? null,
+      updatedClientData.client_role ?? null,
     ];
-
-    if (updatedClientData.logo_url) {
+  
+    if (
+      updatedClientData.logo_url !== null &&
+      updatedClientData.logo_url !== undefined
+    ) {
       updateFields.push("logo_url = ?");
       values.push(updatedClientData.logo_url);
     }
@@ -141,4 +169,5 @@ module.exports = {
   updateClient,
   getClientById,
   getAllPubClients,
+  getWhatClientsSay,
 };

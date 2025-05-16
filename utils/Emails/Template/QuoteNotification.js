@@ -126,32 +126,46 @@ const QuoteNotificationTemplate = (quote) => {
                   </tr>
                 </table>
 
-                <h3 style="margin-top: 30px; color: #232526">Cargo Details:</h3>
-                <table
-                  cellpadding="0"
-                  cellspacing="0"
-                  width="100%"
-                  style="margin-top: 10px; font-size: 14px"
-                >
-                  <tr>
-                    <td style="padding: 8px 0"><strong>Weight:</strong></td>
-                    <td>${quote.weight_kg} kg</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 8px 0"><strong>Dimensions:</strong></td>
-                    <td>${quote.dimensions}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 8px 0">
-                      <strong>No. of Pieces:</strong>
-                    </td>
-                    <td>${quote.number_of_pieces}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 8px 0"><strong>Commodity:</strong></td>
-                    <td>${quote.commodity}</td>
-                  </tr>
-                </table>
+          <h3 style="margin-top: 30px; color: #232526">Cargo Details:</h3>
+${
+  quote.cargos && quote.cargos.length > 0
+    ? quote.cargos
+        .map(
+          (cargo, index) => `
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            width="100%"
+            style="margin-top: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 6px; overflow: hidden;"
+          >
+            <tr style="background-color: #f3f3f3">
+              <td colspan="2" style="padding: 10px;"><strong>Cargo #${
+                index + 1
+              }</strong></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><strong>Weight:</strong></td>
+              <td style="padding: 8px;">${cargo.weight_kg} kg</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><strong>Dimensions:</strong></td>
+              <td style="padding: 8px;">${cargo.dimensions}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><strong>No. of Pieces:</strong></td>
+              <td style="padding: 8px;">${cargo.number_of_pieces}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><strong>Commodity:</strong></td>
+              <td style="padding: 8px;">${cargo.commodity}</td>
+            </tr>
+          </table>
+        `
+        )
+        .join("")
+    : `<p style="font-size: 14px;">No cargo details provided.</p>`
+}
+
 
                 <h3 style="margin-top: 30px; color: #232526">
                   Selected Services:

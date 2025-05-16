@@ -19,13 +19,30 @@ async function getAllPubClients(req, res) {
     res.status(500).json({ message: "Failed to get clients", error });
   }
 }
+async function getWhatClientsSay(req, res) {
+  try {
+    const clients = await clientService.getWhatClientsSay();
+    res.status(200).json(clients);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get what clients says", error });
+  }
+}
 async function createClient(req, res, next) {
   upload(req, res, async function (err) {
     if (err) {
       return res.status(400).json({ error: err });
     }
     try {
-      const { name, email, phone, website, company_name, industry } = req.body;
+      const {
+        name,
+        email,
+        phone,
+        website,
+        company_name,
+        industry,
+        message,
+        client_role,
+      } = req.body;
       const logoPath = req.files["client_logo"]
         ? req.files["client_logo"][0].filename
         : null;
@@ -44,6 +61,8 @@ async function createClient(req, res, next) {
         company_name,
         industry,
         logo_url: logoPath,
+        message,
+        client_role,
       };
 
       const client = await clientService.createClient(clientData);
@@ -97,13 +116,22 @@ async function updateClient(req, res) {
         return res.status(404).json({ message: "Client not found" });
       }
 
-      if (logoPath) {
+      if (logoPath && clientData.logo_url) {
         await deleteFile(`/ClientLogos/${clientData.logo_url}`);
       }
 
-      const { name, email, phone, website, company_name, industry } = req.body;
+      const {
+        name,
+        email,
+        phone,
+        website,
+        company_name,
+        industry,
+        message,
+        client_role,
+      } = req.body;
       // Validate required fields
-      if (!name || !email || !phone || !website || !company_name || !industry) {
+      if (!name || !company_name) {
         return res.status(400).json({ error: "All fields are required" });
       }
 
@@ -114,7 +142,9 @@ async function updateClient(req, res) {
         website,
         company_name,
         industry,
-        logo_url: logoPath, // Save logo file path if uploaded
+        logo_url: logoPath, // Save logo file path if uploaded,
+        message,
+        client_role,
       };
 
       const success = await clientService.updateClient(clientId, updatedData);
@@ -151,4 +181,5 @@ module.exports = {
   updateClient,
   getClientById,
   getAllPubClients,
+  getWhatClientsSay,
 };
