@@ -15,15 +15,16 @@ async function createQuote(quoteData, service_list) {
       phone_number,
       origin_address,
       destination_address,
-
+      city,
+      address,
       additional_info,
       status,
       cargos,
     } = quoteData;
 
     const query = `
-      INSERT INTO quotes (first_name, last_name, email, phone_number, origin_address, destination_address, additional_info, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO quotes (first_name, last_name, email, phone_number, origin_address, destination_address, city, address, additional_info, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const result = await db.query(query, [
       first_name,
@@ -32,6 +33,8 @@ async function createQuote(quoteData, service_list) {
       phone_number,
       origin_address,
       destination_address,
+      city,
+      address,
       additional_info,
       status || "pending",
     ]);
@@ -169,6 +172,8 @@ async function updateQuote(quoteId, quoteData, service_list) {
       phone_number,
       origin_address,
       destination_address,
+      city,
+      address,
       additional_info,
       status,
       cargos,
@@ -177,7 +182,8 @@ async function updateQuote(quoteId, quoteData, service_list) {
     const query = `
       UPDATE quotes
       SET first_name = ?, last_name = ?, email = ?, phone_number = ?, 
-          origin_address = ?, destination_address = ?, additional_info = ?, status = ?
+          origin_address = ?, destination_address = ?, additional_info = ?, status = ?, city = ?,
+      address = ?
       WHERE quote_id = ?
     `;
     const result = await db.query(query, [
@@ -189,6 +195,8 @@ async function updateQuote(quoteId, quoteData, service_list) {
       destination_address,
       additional_info,
       status || "pending",
+      city,
+      address,
       quoteId,
     ]);
 

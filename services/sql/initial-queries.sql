@@ -137,6 +137,8 @@ CREATE TABLE IF NOT EXISTS `quotes` (
     `phone_number` VARCHAR(50),
     `origin_address` TEXT,
     `destination_address` TEXT,
+    `city` TEXT,
+    `address` TEXT,
     `additional_info` TEXT,
     `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     `submitted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP

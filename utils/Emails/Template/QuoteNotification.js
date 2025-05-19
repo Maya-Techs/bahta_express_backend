@@ -124,6 +124,18 @@ const QuoteNotificationTemplate = (quote) => {
                     </td>
                     <td>${quote.destination_address}</td>
                   </tr>
+                   <tr>
+                    <td style="padding: 8px 0">
+                      <strong>City:</strong>
+                    </td>
+                    <td>${quote.city}</td>
+                  </tr>
+                   <tr>
+                    <td style="padding: 8px 0">
+                      <strong>Address:</strong>
+                    </td>
+                    <td>${quote.address}</td>
+                  </tr>
                 </table>
 
           <h3 style="margin-top: 30px; color: #232526">Cargo Details:</h3>
