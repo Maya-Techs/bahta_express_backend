@@ -23,7 +23,7 @@ async function getStats() {
       : [statusQuoteRows];
 
     const statusCounts = statusQuoteArray.reduce((acc, row) => {
-      if (row.status) {
+      if (row.status && row.total !== undefined) {
         acc[row.status] = row.total;
       }
       return acc;
