@@ -14,24 +14,34 @@ async function getStats() {
       "SELECT COUNT(*) AS total FROM quotes WHERE YEARWEEK(submitted_at, 1) = YEARWEEK(CURDATE(), 1)"
     );
 
-    const [statusQuoteRows] = await conn.query(
+    // const [statusQuoteRows] = await conn.query(
+    //   `SELECT status, COUNT(*) AS total FROM quotes GROUP BY status`
+    // );
+    const statusQuoteRows = await conn.query(
       `SELECT status, COUNT(*) AS total FROM quotes GROUP BY status`
     );
 
-    const statusQuoteArray = Array.isArray(statusQuoteRows)
-      ? statusQuoteRows
-      : [statusQuoteRows];
+    // Initialize default counts
+    const statusCounts = {
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+    };
 
-    const statusCounts = statusQuoteArray.reduce((acc, row) => {
+    // Populate from query results
+    for (const row of statusQuoteRows) {
       if (row.status && row.total !== undefined) {
-        acc[row.status] = row.total;
+        statusCounts[row.status] = row.total;
       }
-      return acc;
-    }, {});
+    }
 
-    const totalApproved = statusCounts["approved"] || 0;
-    const totalRejected = statusCounts["rejected"] || 0;
-    const totalPending = statusCounts["pending"] || 0;
+    const totalApproved = statusCounts.approved;
+    const totalRejected = statusCounts.rejected;
+    const totalPending = statusCounts.pending;
+
+    // const totalApproved = statusCounts["approved"] || 0;
+    // const totalRejected = statusCounts["rejected"] || 0;
+    // const totalPending = statusCounts["pending"] || 0;
 
     const [blogRows] = await conn.query("SELECT COUNT(*) AS total FROM blogs");
     const [clientRows] = await conn.query(
