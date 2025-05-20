@@ -115,26 +115,38 @@ const QuoteNotificationTemplate = (quote) => {
                   style="margin-top: 10px; font-size: 14px"
                 >
                   <tr>
-                    <td style="padding: 8px 0"><strong>Origin:</strong></td>
+                    <td style="padding: 8px 0"><strong>Origin Country:</strong></td>
+                    <td>${quote.origin_country}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0">
+                      <strong>Origin City:</strong>
+                    </td>
+                    <td>${quote.origin_city}</td>
+                  </tr>
+                   <tr>
+                    <td style="padding: 8px 0">
+                      <strong>Origin Address:</strong>
+                    </td>
                     <td>${quote.origin_address}</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0">
-                      <strong>Destination:</strong>
+                      <strong>Destination Country:</strong>
+                    </td>
+                    <td>${quote.destination_country}</td>
+                  </tr>
+                   <tr>
+                    <td style="padding: 8px 0">
+                      <strong>Destination City:</strong>
+                    </td>
+                    <td>${quote.destination_city}</td>
+                  </tr>
+                   <tr>
+                    <td style="padding: 8px 0">
+                      <strong>Destination Address:</strong>
                     </td>
                     <td>${quote.destination_address}</td>
-                  </tr>
-                   <tr>
-                    <td style="padding: 8px 0">
-                      <strong>City:</strong>
-                    </td>
-                    <td>${quote.city}</td>
-                  </tr>
-                   <tr>
-                    <td style="padding: 8px 0">
-                      <strong>Address:</strong>
-                    </td>
-                    <td>${quote.address}</td>
                   </tr>
                 </table>
 

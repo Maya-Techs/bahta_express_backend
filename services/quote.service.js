@@ -13,28 +13,32 @@ async function createQuote(quoteData, service_list) {
       last_name,
       email,
       phone_number,
+      origin_country,
+      origin_city,
       origin_address,
+      destination_country,
+      destination_city,
       destination_address,
-      city,
-      address,
       additional_info,
       status,
       cargos,
     } = quoteData;
 
     const query = `
-      INSERT INTO quotes (first_name, last_name, email, phone_number, origin_address, destination_address, city, address, additional_info, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO quotes (first_name, last_name, email, phone_number, origin_country, origin_city, origin_address, destination_country, destination_city, destination_address, additional_info, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const result = await db.query(query, [
       first_name,
       last_name,
       email,
       phone_number,
+      origin_country,
+      origin_city,
       origin_address,
+      destination_country,
+      destination_city,
       destination_address,
-      city,
-      address,
       additional_info,
       status || "pending",
     ]);
@@ -88,8 +92,8 @@ async function createQuote(quoteData, service_list) {
       last_name,
       email,
       phone_number,
-      origin_address,
-      destination_address,
+      origin_country,
+      destination_country,
       additional_info,
       status,
     };
@@ -170,10 +174,12 @@ async function updateQuote(quoteId, quoteData, service_list) {
       last_name,
       email,
       phone_number,
+      origin_country,
+      destination_country,
+      origin_city,
       origin_address,
+      destination_city,
       destination_address,
-      city,
-      address,
       additional_info,
       status,
       cargos,
@@ -182,8 +188,7 @@ async function updateQuote(quoteId, quoteData, service_list) {
     const query = `
       UPDATE quotes
       SET first_name = ?, last_name = ?, email = ?, phone_number = ?, 
-          origin_address = ?, destination_address = ?, additional_info = ?, status = ?, city = ?,
-      address = ?
+          origin_country = ?, origin_city = ?, origin_address = ?, destination_country = ?, destination_city = ?, destination_address = ?, additional_info = ?, status = ?
       WHERE quote_id = ?
     `;
     const result = await db.query(query, [
@@ -191,12 +196,14 @@ async function updateQuote(quoteId, quoteData, service_list) {
       last_name,
       email,
       phone_number,
+      origin_country,
+      origin_city,
       origin_address,
+      destination_country,
+      destination_city,
       destination_address,
       additional_info,
       status || "pending",
-      city,
-      address,
       quoteId,
     ]);
 
@@ -246,14 +253,6 @@ async function updateQuote(quoteId, quoteData, service_list) {
 
     return {
       quote_id: quoteId,
-      first_name,
-      last_name,
-      email,
-      phone_number,
-      origin_address,
-      destination_address,
-      additional_info,
-      status,
     };
   } catch (error) {
     console.error("Error updating quote:", error);
