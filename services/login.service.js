@@ -11,68 +11,50 @@ const { generateOTPEmailContent } = require("../utils/Emails/Template/OTP");
 
 async function logIn(userData) {
   try {
-    let returnData = {};
     const user = await getUserByEmail(userData.user_email);
-    const password = user.data[0].user_password_hashed;
-    const email = user.data[0].user_email;
-    if (user.length === 0) {
-      returnData = {
+
+    if (!user || !user.data || user.data.length === 0) {
+      return {
         status: "fail",
         message: "This email does not exist. Please check and try again.",
       };
-      return returnData;
     }
-    const passwordMatch = await bcrypt.compare(userData.user_pass, password);
+
+    const userRecord = user.data[0];
+
+    const passwordMatch = await bcrypt.compare(
+      userData.user_pass,
+      userRecord.user_password_hashed
+    );
+
     if (!passwordMatch) {
-      returnData = {
+      return {
         status: "fail",
         message: "The password is not correct. Please check and try again.",
       };
-      return returnData;
     }
-    const isActive = await checkActiveStatus(email);
+
+    const isActive = await checkActiveStatus(userRecord.user_email);
+
     if (!isActive) {
-      returnData = {
+      return {
         status: "fail",
         message:
-          "Your account is currently inactive. If you believe this is an error, please contact your administrator for assistance.",
-      };
-      return returnData;
-    }
-    const existingOTP = await getOTPByEmail(email);
-    if (existingOTP !== null) {
-      return {
-        status: "success",
-        message: "OTP already sent",
+          "Your account is currently inactive. Please contact your administrator.",
       };
     }
-    const generatedOTP = otpGenerator.generate(6, {
-      digits: true,
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    });
-    const firstName = user.data[0].user_first_name;
-    const emailContent = generateOTPEmailContent(generatedOTP, firstName);
-    const sendEmailStatus = await sendEmail(
-      email,
-      "Bahta Express Your One-Time Password",
-      emailContent
-    );
-    if (sendEmailStatus.status === "success") {
-      await conn.query(
-        "INSERT INTO otp_requests (token, email) VALUES (?, ?)",
-        [generatedOTP, email]
-      );
-    }
-    returnData = {
+
+    // ✅ SUCCESS → return user data directly
+    return {
       status: "success",
-      data: user.data[0],
-      emailStatus: sendEmailStatus,
+      data: userRecord,
     };
-    return returnData;
   } catch (error) {
     console.error(error);
+    return {
+      status: "fail",
+      message: "Login failed due to server error",
+    };
   }
 }
 

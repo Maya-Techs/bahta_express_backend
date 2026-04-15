@@ -12,10 +12,10 @@ function maskEmail(email) {
 async function logIn(req, res, next) {
   try {
     const userData = req.body;
-    const userEmail = userData.user_email;
 
-    const userExist = await getUserByEmail(req.body.user_email);
-    if (!userExist) {
+    const userExist = await getUserByEmail(userData.user_email);
+
+    if (!userExist || !userExist.data || userExist.data.length === 0) {
       return res.status(404).json({
         status: "fail",
         message:
@@ -24,60 +24,44 @@ async function logIn(req, res, next) {
     }
 
     const user = await loginService.logIn(userData);
-    if (user && user.status === "fail") {
+
+    if (!user || user.status === "fail") {
       return res.status(403).json({
-        status: user.status,
-        message: user.message,
-      });
-    }
-
-    if (user.message === "OTP already sent") {
-      const maskedEmail = maskEmail(userEmail);
-      return res.status(200).json({
-        status: "success",
-        message: `An OTP has already been sent to your email ${maskedEmail}. it is valid for 5 minutes.`,
-        data: {
-          user_email: userEmail,
-          mask_email: maskedEmail,
-        },
-      });
-    }
-
-    if (user.emailStatus.status === "fail") {
-      return res.status(400).json({
         status: "fail",
-        message:
-          "We are unable to send OTP to your email address at this time, please try again later.",
+        message: user.message || "Login failed",
       });
     }
 
-    LoginUser[user.data.user_email] = {
+    // ✅ Generate JWT directly (NO OTP)
+    const payload = {
       user_id: user.data.user_id,
-      user_email: user.data.user_email,
-      user_role: user.data.company_role_id,
       user_first_name: user.data.user_first_name,
       user_last_name: user.data.user_last_name,
+      user_role: user.data.company_role_id,
+      user_email: user.data.user_email,
       user_phone: user.data.user_phone,
     };
 
-    const maskedEmail = maskEmail(
-      user.data.user_email || user.data.client_email
-    );
+    const token = jwt.sign(payload, jwtSecret, {
+      expiresIn: "27d",
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
-      message: `Check your email ${maskedEmail} for a one-time password to complete the verification process.`,
+      message: "Login successful",
       data: {
-        user_email: user.data.user_email || user.data.client_email,
-        mask_email: maskedEmail,
+        access_token: token,
+        user: payload,
       },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ status: "error", message: "Internal server error" });
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
   }
 }
-
 async function verifyOTPAndGenerateToken(req, res, next) {
   try {
     const user_email = req.body.email;
